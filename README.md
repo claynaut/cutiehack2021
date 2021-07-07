@@ -73,4 +73,4 @@ Run the following commands in a terminal.
 - If you want to work on an issue, assign yourself to the issue (see the righthand side).
 
 ## Tech Stack
-- **[NextJS](https://nextjs.org/)**: This is the frontend framework for this project
+- **[NextJS](https://nextjs.org/)**: This is the frontend framework for this project.
