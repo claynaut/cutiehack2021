@@ -1,11 +1,11 @@
 import React from 'react'
-import CheckInForm from '../components/CheckInForm'
-import Layout from '../components/Layout'
+import Layout from '../../../components/Layout'
 import { useSession } from 'next-auth/client'
+import { Toaster } from 'react-hot-toast'
 
-import styles from '../styles/Index.module.css'
+import styles from '../../../styles/Index.module.css'
 
-export default function CheckIn() {
+export default function GroupPage() {
   const [session, loading] = useSession()
 
   if (loading)
@@ -24,8 +24,14 @@ export default function CheckIn() {
 
   return (
     <Layout>
+      <div>
+        <Toaster />
+      </div>
       <div className={styles.container}>
-        <CheckInForm name={session.user.name} email={session.user.email} />
+        {/* display group info (group name, invite code, team members) */}
+        <div>Group Name</div>
+        <div>Invite Code</div>
+        <div>Members</div>
       </div>
     </Layout>
   )

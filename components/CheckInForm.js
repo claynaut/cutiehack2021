@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useRouter } from 'next/router'
+import toast, { Toaster } from 'react-hot-toast'
 import { FiChevronDown } from 'react-icons/fi'
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from 'react-icons/io'
 
 import styles from '../styles/Index.module.css'
 import formStyles from '../styles/Form.module.css'
 
-export default function Form(props) {
-  const [error, setError] = React.useState('');
-  const [open_race, toggleOpenRace] = React.useState(false);
-  const [open_gender, toggleOpenGender] = React.useState(false);
-  const [race, setRace] = React.useState('Select an option...');
-  const [gender, setGender] = React.useState('Select an option...');
+export default function CheckInForm(props) {
+  const router = useRouter()
+
+  const [error, setError] = React.useState(false)
+  const [open_race, toggleOpenRace] = React.useState(false)
+  const [open_gender, toggleOpenGender] = React.useState(false)
+  const [race, setRace] = React.useState('Select an option...')
+  const [gender, setGender] = React.useState('Select an option...')
   const [options] = React.useState({
     race: [
       'American Indian or Alaska Native',
@@ -28,11 +32,11 @@ export default function Form(props) {
       'Prefer not to say',
     ]
   })
-  const [school, setSchool] = React.useState('');
-  const [major, setMajor] = React.useState('');
-  const [grade, setGrade] = React.useState('');
-  const [first_time, setFirstTime] = React.useState('');
-  const [submit_triggered, triggerSubmit] = React.useState(false);
+  const [school, setSchool] = React.useState('')
+  const [major, setMajor] = React.useState('')
+  const [grade, setGrade] = React.useState('')
+  const [first_time, setFirstTime] = React.useState('')
+  const [submit_triggered, triggerSubmit] = React.useState(false)
   const [filled] = React.useState({
     race: false,
     gender: false,
@@ -91,7 +95,7 @@ export default function Form(props) {
   const submitForm = (name, email) => {
     triggerSubmit(true)
     if (Object.values(filled).every(e => e)) {
-      setError('')
+      setError(false)
       const data = [
         name,
         email,
@@ -102,9 +106,13 @@ export default function Form(props) {
         grade,
         first_time,
       ]
-      sendData(data)
+      // uncomment when you want to write to db
+      // sendData(data)
+      router.push('/groups/create')
+      toast.success('Succesfully checked in!')
     } else {
-      setError('Please fill out all required fields.')
+      setError(true)
+      toast.error('Please fill out all required fields.')
     }
   }
   
@@ -124,7 +132,10 @@ export default function Form(props) {
 
   return (
     <section>
-      <div className={formStyles.errorMsg}>{error}</div>
+      { error 
+        ? <div><Toaster /></div>
+        : null
+      }
       <div className={formStyles.inputWrapper}>
         <div className={formStyles.inputHeader}>Race</div>
         <div className={formStyles.dropdown}>
@@ -281,5 +292,5 @@ export default function Form(props) {
         Submit
       </div>
     </section>
-  );
+  )
 }
