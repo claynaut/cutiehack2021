@@ -25,7 +25,8 @@ export default function CheckIn() {
   return (
     <Layout>
       <div className={styles.container}>
-        <CheckInForm name={session.user.name} email={session.user.email} />
+        <h1 className={styles.subtitle}>Check In</h1>
+        <CheckInForm name={session.user.name} />
       </div>
     </Layout>
   )
