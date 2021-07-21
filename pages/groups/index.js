@@ -1,13 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
-import Layout from '../../components/Layout'
 import { useSession } from 'next-auth/client'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 
-import styles from '../../styles/Index.module.css'
-import formStyles from '../../styles/Form.module.css'
+import Layout from '../../components/Layout'
 
-export default function CreateGroup() {
+import styles from '../../styles/Form.module.css'
+
+export default function groupId() {
+  const router = useRouter()
   const [session, loading] = useSession()
+
+  const [inGroup, setInGroup] = React.useState(false)
+  const [groupId, setGroupId] = React.useState('')
+
+  const fetchData = async (userId) => {
+    const response = await fetch('/api/checkin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user: userId }),
+    })
+    const data = await response.json()
+    if (Object.keys(data.checkins).length === 0) {
+      router.push('/checkin')
+      toast.error('Access denied. Please check in!', { id: 'notCheckedInGroupPageError' })
+    }
+    if (data.checkins[0]) {
+      setInGroup(data.checkins[0].groupId !== '')
+      if (data.checkins[0].groupId !== '') {
+        setGroupId(data.checkins[0].groupId)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!loading && !session) {
+      router.push('/signin')
+      toast.error('Access denied. Please sign in!', {
+        id: 'notSignedInGroupError',
+      })
+    } else if (session) {
+      fetchData(session.user.id)
+    }
+  }, [loading, session])
 
   if (loading)
     return (
@@ -16,26 +54,25 @@ export default function CreateGroup() {
       </Layout>
     )
 
-  if (!loading && !session)
-    return (
-      <Layout>
-        <p>Access Denied. Please login!</p>
-      </Layout>
-    )
-
   return (
     <Layout>
-      <div className={styles.container}>
-        <Link passHref href="/groups/create">
-          <div className={formStyles.button}>Create a Group</div>
+      {inGroup ? (
+        <Link passHref href={'/groups/' + groupId}>
+          <div className={styles.button}>View Your Group</div>
         </Link>
-        <Link passHref href="/groups/join">
-          <div className={formStyles.button}>Join a Group</div>
-        </Link>
-        <Link passHref href="/">
-          <div className={formStyles.button}>Go Back to Homepage</div>
-        </Link>
-      </div>
+      ) : (
+        <>
+          <Link passHref href="/groups/create">
+            <div className={styles.button}>Create a Group</div>
+          </Link>
+          <Link passHref href="/groups/join">
+            <div className={styles.button}>Join a Group</div>
+          </Link>
+        </>
+      )}
+      <Link passHref href="/">
+        <div className={styles.button}>Go Back to Homepage</div>
+      </Link>
     </Layout>
   )
 }

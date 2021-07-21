@@ -1,10 +1,11 @@
 import React from 'react'
-import Layout from '../components/Layout'
-import styles from '../styles/Index.module.css'
-import formStyles from '../styles/Form.module.css'
-import { motion } from 'framer-motion'
 import { providers, signIn, getSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
+import { motion } from 'framer-motion'
+
+import Layout from '../components/Layout'
+
+import styles from '../styles/Form.module.css'
 
 const SignInError = ({ error }) => {
   const errors = {
@@ -34,32 +35,30 @@ export default function SignIn({ providers }) {
 
   return (
     <Layout>
-      <div className={styles.container}>
-        {error && (
-          <div className={formStyles.errorMsg}>
-            <SignInError error={error} />
-          </div>
-        )}
-        {Object.values(providers).map((provider) => {
-          if (provider.name === 'Email') {
-            return
-          }
-          return (
-            <motion.button
-              aria-label="Provider Sign In Button"
-              type="button"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.997 }}
-              transition={{ ease: 'easeInOut', duration: 0.015 }}
-              key={provider.name}
-              className={formStyles.button}
-              onClick={() => signIn(provider.id)}
-            >
-              Sign in with {provider.name}
-            </motion.button>
-          )
-        })}
-      </div>
+      {error && (
+        <div className={styles.errorMsg}>
+          <SignInError error={error} />
+        </div>
+      )}
+      {Object.values(providers).map((provider) => {
+        if (provider.name === 'Email') {
+          return
+        }
+        return (
+          <motion.button
+            aria-label="Provider Sign In Button"
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.997 }}
+            transition={{ ease: 'easeInOut', duration: 0.015 }}
+            key={provider.name}
+            className={styles.button}
+            onClick={() => signIn(provider.id)}
+          >
+            Sign in with {provider.name}
+          </motion.button>
+        )
+      })}
     </Layout>
   )
 }

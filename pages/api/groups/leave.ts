@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { connectToDatabase } from '../../../util/mongodb'
 
-export default async function JoinGroup(req: NextApiRequest, res: NextApiResponse) {
+export default async function LeaveGroup(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { db } = await connectToDatabase();
     const { group: [ groupId, userId, users ] } = req.body; // check # of users before calling
@@ -11,7 +11,7 @@ export default async function JoinGroup(req: NextApiRequest, res: NextApiRespons
     );
     db.collection('checkins').updateOne(
       {'userId': userId },
-      { $set: {'groupId': groupId } }
+      { $set: {'groupId': '' } }
     );
     res.status(200);
     res.json({});
