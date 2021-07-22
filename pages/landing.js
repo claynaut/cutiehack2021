@@ -1,9 +1,11 @@
-
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/client'
+import { useRouter } from 'next/router'
+import { nanoid } from 'nanoid'
 import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
 
 import CountdownWrapper from '../components/Countdown'
 
@@ -15,6 +17,7 @@ import { FaCircle } from 'react-icons/fa'
 import styles from '../styles/Index.module.css'
 
 export default function Home() {
+  const router = useRouter()
   const [session] = useSession()
 
   const [isMobile, setIsMobile] = useState(false)
@@ -52,6 +55,21 @@ export default function Home() {
         setGroupId(data.checkins[0].groupId)
       }
     }
+  }
+
+  const createGroup = async (userId, userName) => {
+    const groupId = nanoid()
+    const response = await fetch('/api/groups/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ group: [ groupId, userId, userName ] }),
+    })
+    await response.json()
+    toast.success('Successfully created a group!', { id: 'createGroupSuccess'})
+    const dst = '/groups/' + groupId.toString()
+    router.push(dst)
   }
 
   const handleResize = () => {
@@ -119,7 +137,7 @@ export default function Home() {
               <div>
                 <h1 className={styles.title}>cutie hack</h1>
                 <CountdownWrapper />
-                {!session && isMobile &&
+                {!session && isMobile && (
                   <motion.button
                     aria-label="Sign In Button"
                     type="button"
@@ -132,8 +150,8 @@ export default function Home() {
                   >
                     Sign in
                   </motion.button>
-                }
-                {session && isMobile && !checkedIn &&
+                )}
+                {session && isMobile && !checkedIn && (
                   <Link passHref href="/checkin">
                     <motion.a
                       aria-label="Check In Button"
@@ -147,9 +165,9 @@ export default function Home() {
                       Check In
                     </motion.a>
                   </Link>
-                }
-                {session && isMobile && inGroup &&
-                  <Link passHref href={"/groups/" + groupId}>
+                )}
+                {session && isMobile && inGroup && (
+                  <Link passHref href={'/groups/' + groupId}>
                     <motion.a
                       aria-label="View Group Button"
                       type="button"
@@ -162,22 +180,21 @@ export default function Home() {
                       View Your Group
                     </motion.a>
                   </Link>
-                }
+                )}
                 {session && checkedIn && !inGroup && (
                   <div className={styles.actionwrapper}>
-                    <Link passHref href="/groups/create">
-                      <motion.a
-                        aria-label="Create Group Button"
-                        type="button"
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                        transition={{ ease: 'easeInOut', duration: 0.015 }}
-                        className={styles.primarybutton}
-                      >
-                        Create a Group
-                      </motion.a>
-                    </Link>
+                    <motion.button
+                      aria-label="Create Group Button"
+                      type="button"
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      transition={{ ease: 'easeInOut', duration: 0.015 }}
+                      className={styles.primarybutton}
+                      onClick={() => createGroup(session.user.id, session.user.name)}
+                    >
+                      Create Group
+                    </motion.button>
                     <Link passHref href="/groups/join">
                       <motion.a
                         aria-label="Join Group Button"
