@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link' // We should be using the Link component
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 
 import { HiMenu, HiX } from 'react-icons/hi'
 
@@ -10,10 +11,20 @@ import styles from '../styles/Nav.module.css'
 export default function Nav() {
   const [session] = useSession()
 
-  const [checkedIn, setCheckedIn] = React.useState(false)
-  const [inGroup, setInGroup] = React.useState(false)
-  const [groupId, setGroupId] = React.useState('')
-  const [hideTabs, setHideTabs] = React.useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.05 },
+      tap: { scale: 0.995 }
+    }
+
+  const [targetElement, setTargetElement] = useState(null)
+
+  const [checkedIn, setCheckedIn] = useState(false)
+  const [inGroup, setInGroup] = useState(false)
+  const [groupId, setGroupId] = useState('')
+  const [hideTabs, setHideTabs] = useState(false)
   const [open, setOpen] = useState(false)
 
   const fetchData = async (id) => {
@@ -46,20 +57,25 @@ export default function Nav() {
 
   const handleResize = () => {
     if (window.innerWidth > 720) setOpen(false)
+    setIsMobile(window.innerWidth <= 720)
   }
 
   useEffect(() => {
     if (session) fetchData(session.user.id)
     checkPage()
+
     window.addEventListener('resize', handleResize)
+
+    setTargetElement(document.querySelector('nav'))
+    if (targetElement) {
+      if (open) disableBodyScroll(targetElement)
+      else enableBodyScroll(targetElement)
+    }
   })
 
   return (
     <span className={open && styles.open}>
-      <nav className={styles.navbar}
-      onresize={() => {
-        if (window.innerWidth > 720) setOpen(false)
-      }}>
+      <nav className={styles.navbar}>
         <div 
           className={styles.menuButtonWrapper}
           onClick={() => toggle()}
@@ -67,7 +83,7 @@ export default function Nav() {
           <HiMenu className={styles.menuButton} />
           <HiX className={styles.menuButton} />
         </div>
-        <div className={styles.tabs}>
+        <div id="nav" className={styles.tabs}>
           <Link href="/">Home</Link>
           <a href="#" className={hideTabs && styles.hidetabs}>About</a>
           <a href="#" className={hideTabs && styles.hidetabs}>FAQ</a>
@@ -77,9 +93,10 @@ export default function Nav() {
             <motion.button
               aria-label="Sign In Button"
               type="button"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.995 }}
-              transition={{ ease: 'easeInOut', duration: 0.015 }}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              transition="ease"
               className={styles.primarybutton}
               onClick={signIn}
             >
@@ -92,8 +109,9 @@ export default function Nav() {
                   <motion.a
                     aria-label="Check In Button"
                     type="button"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.995 }}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
                     transition={{ ease: 'easeInOut', duration: 0.015 }}
                     className={styles.primarybutton}
                   >
@@ -106,8 +124,9 @@ export default function Nav() {
                   <motion.a
                     aria-label="View Group Button"
                     type="button"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.995 }}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
                     transition={{ ease: 'easeInOut', duration: 0.015 }}
                     className={styles.primarybutton}
                   >
@@ -118,8 +137,9 @@ export default function Nav() {
               <motion.button
                 aria-label="Sign Out Button"
                 type="button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.995 }}
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
                 transition={{ ease: 'easeInOut', duration: 0.015 }}
                 className={styles.secondarybutton}
                 onClick={signOut}

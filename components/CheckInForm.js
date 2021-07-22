@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
@@ -14,15 +14,23 @@ export default function CheckInForm() {
   const router = useRouter()
   const [session] = useSession()
 
-  const [isValidEmail, setIsValidEmail] = React.useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.02 },
+      tap: { scale: 0.997 }
+    }
 
-  const [email, setEmail] = React.useState('')
-  const [emailConfirm, setEmailConfirm] = React.useState('')
-  const [openRace, toggleOpenRace] = React.useState(false)
-  const [openGender, toggleOpenGender] = React.useState(false)
-  const [race, setRace] = React.useState('Select an option...')
-  const [gender, setGender] = React.useState('Select an option...')
-  const [options] = React.useState({
+  const [isValidEmail, setIsValidEmail] = useState(true)
+
+  const [email, setEmail] = useState('')
+  const [emailConfirm, setEmailConfirm] = useState('')
+  const [openRace, toggleOpenRace] = useState(false)
+  const [openGender, toggleOpenGender] = useState(false)
+  const [race, setRace] = useState('Select an option...')
+  const [gender, setGender] = useState('Select an option...')
+  const [options] = useState({
     race: [
       'American Indian or Alaska Native',
       'Asian',
@@ -33,12 +41,12 @@ export default function CheckInForm() {
     ],
     gender: ['Male', 'Female', 'Nonbinary', 'Other', 'Prefer not to say'],
   })
-  const [school, setSchool] = React.useState('')
-  const [major, setMajor] = React.useState('')
-  const [grade, setGrade] = React.useState('')
-  const [first_time, setFirstTime] = React.useState('')
-  const [submit_triggered, triggerSubmit] = React.useState(false)
-  const [filled] = React.useState({
+  const [school, setSchool] = useState('')
+  const [major, setMajor] = useState('')
+  const [grade, setGrade] = useState('')
+  const [first_time, setFirstTime] = useState('')
+  const [submit_triggered, triggerSubmit] = useState(false)
+  const [filled] = useState({
     email: false,
     emailConfirm: false,
     race: false,
@@ -155,6 +163,14 @@ export default function CheckInForm() {
     })
     await response.json()
   }
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 720)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+  })
 
   return (
     <section>
@@ -342,8 +358,9 @@ export default function CheckInForm() {
       <motion.button
         aria-label="Check In Button"
         type="button"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.997 }}
+        variants={buttonVariants}
+        whileHover="hover"
+        whileTap="tap"
         transition={{ ease: 'easeInOut', duration: 0.015 }}
         className={styles.button}
         onClick={() => submitForm(session.user.name, session.user.id)}
