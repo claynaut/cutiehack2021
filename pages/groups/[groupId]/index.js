@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
+import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Layout from '../../../components/Layout'
 
-import styles from '../../../styles/Form.module.css'
+import { MdContentCopy } from 'react-icons/md'
+import { FaRegCircle } from 'react-icons/fa'
+
+import styles from '../../../styles/Group.module.css'
+import formStyles from '../../../styles/Form.module.css'
 
 export default function GroupPage() {
   const router = useRouter()
   const [session, loading] = useSession()
+
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.02 },
+      tap: { scale: 0.997 },
+    }
 
   const [groupId, setGroupId] = useState('')
   const [users, setUsers] = useState([])
@@ -28,6 +43,22 @@ export default function GroupPage() {
       toast.error('Access denied. Please check in!', {
         id: 'notCheckedInGroupPageError',
       })
+    }
+  }
+
+  const checkValidGroup = async () => {
+    const groupId = await fetchGroupId(session.user.id)
+    const pageURL = window.location.href
+    const lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1)
+
+    if (groupId !== lastURLSegment) {
+      router.push('/')
+      toast.error(
+        'Access denied. This group does not exist, or you are not in this group.',
+        { id: 'invalidGroupError' }
+      )
+    } else {
+      await fetchGroup(groupId)
     }
   }
 
@@ -60,22 +91,6 @@ export default function GroupPage() {
       }
       setUsers(users)
       return data.groups[0].users
-    }
-  }
-
-  const checkValidGroup = async () => {
-    const groupId = await fetchGroupId(session.user.id)
-    const pageURL = window.location.href
-    const lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1)
-
-    if (groupId !== lastURLSegment) {
-      router.push('/')
-      toast.error(
-        'Access denied. This group does not exist, or you are not in this group.',
-        { id: 'invalidGroupError' }
-      )
-    } else {
-      await fetchGroup(groupId)
     }
   }
 
@@ -115,7 +130,12 @@ export default function GroupPage() {
     toast.success('Successfully left the group!', { id: 'leaveGroupSuccess' })
   }
 
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 720)
+  }
+
   useEffect(() => {
+    window.addEventListener('resize', handleResize)
     if (!loading && !session) {
       router.push('/signin')
       toast.error('Access denied. Please sign in!', {
@@ -137,17 +157,60 @@ export default function GroupPage() {
   return (
     <Layout>
       <h1>Invite Code</h1>
-      {groupId}
+      <CopyToClipboard 
+        text={groupId}
+        className={styles.copywrapper}
+      >
+        <motion.button
+          aria-label="Provider Sign In Button"
+          type="button"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          transition={{ ease: 'easeInOut', duration: 0.015 }}
+          className={styles.copywrapper}
+          onClick={() => toast.success('Copied to clipboard!')}
+        >
+          <div className={styles.filler}><MdContentCopy /></div>
+          <div>{groupId}</div>
+          <MdContentCopy className={styles.copybutton} />
+        </motion.button>
+      </CopyToClipboard>
       <h1>Members</h1>
-      {users.map((user) => (
-        <div>{user}</div>
-      ))}
-      <div
+      <div className={styles.userlist}>
+        {users.map((user) => (
+          <div className={styles.user}>
+            <FaRegCircle />
+            <div>{user}</div>
+            <FaRegCircle className={styles.filler}/>
+          </div>
+        ))}
+      </div>
+      <motion.button
+        aria-label="Provider Sign In Button"
+        type="button"
+        variants={buttonVariants}
+        whileHover="hover"
+        whileTap="tap"
+        transition={{ ease: 'easeInOut', duration: 0.015 }}
+        className={formStyles.button}
         onClick={() => leaveGroup(session.user.id)}
-        className={styles.button}
       >
         Leave Group
-      </div>
+      </motion.button>
+      <Link passHref href="/">
+        <motion.button
+          aria-label="Provider Sign In Button"
+          type="button"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          transition={{ ease: 'easeInOut', duration: 0.015 }}
+          className={`${formStyles.button} ${formStyles.home}`}
+        >
+          Go Back to Homepage
+        </motion.button>
+      </Link>
     </Layout>
   )
 }
