@@ -31,21 +31,10 @@
   padding: 0 1rem;
   overflow: hidden;
 }
-.sponsors {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  padding: 0 1rem;
-  overflow: hidden;
-}
 
 .window {
   margin: 0.5rem;
-  border: 2.5px solid var(--brand-light);
+  border: 2.5px solid var(--brand-darkest);
   border-radius: 5px;
   text-align: center;
   background: var(--nav-bg);
@@ -58,7 +47,7 @@
   display: flex;
   padding: 0.5rem;
   border-radius: 5px 5px 0 0;
-  border-bottom: 2px solid var(--brand-light);
+  border-bottom: 2px solid var(--brand-darkest);
   background: var(--nav-bg);
 }
 
@@ -99,10 +88,10 @@
 }
 
 .greeting {
-  padding: 0.5rem;
-  border: 2.5px solid var(--brand-light);
+  padding: 0.5rem 2rem;
+  border: 2px solid var(--brand-darkest);
   border-radius: 5px;
-  color: var(--brand-light);
+  color: var(--brand-darkest);
   font-size: 2rem;
 }
 
@@ -132,7 +121,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  margin: 1rem 0;
+}
+
+.window .primarybutton {
+  padding: 0.5rem 2rem;
+  font-size: 1.4rem;
 }
 
 .primarybutton,
@@ -208,6 +202,12 @@
   .actionwrapper a:nth-of-type(1) {
     margin: 10px 0;
   }
+  .window .primarybutton {
+    font-size: 1.1rem;
+  }
+  .actionwrapper {
+    margin-top: 0.5rem;
+  }
 }
 
 @media (min-width: 420px) and (max-width: 530px) {
@@ -243,6 +243,9 @@
   }
   .windowContent {
     margin: 6% 4%;
+  }
+  .greeting {
+    padding: 0.5rem;
   }
 }
 
