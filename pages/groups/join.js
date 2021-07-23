@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Head from 'next/head'
 import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -48,12 +49,18 @@ export default function JoinGroup() {
   if (loading)
     return (
       <Layout>
+        <Head>
+          <title>Cutie Hack | Join a Group</title>
+        </Head>
         <p>Loading...</p>
       </Layout>
     )
 
   return (
     <Layout>
+      <Head>
+        <title>Cutie Hack | Join a Group</title>
+      </Head>
       <h1>Join a Group</h1>
       <JoinGroupForm />
     </Layout>

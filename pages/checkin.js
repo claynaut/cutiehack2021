@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Head from 'next/head'
 import { useSession } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -39,12 +40,18 @@ export default function CheckIn() {
   if (loading)
     return (
       <Layout>
+        <Head>
+          <title>Cutie Hack | Check In</title>
+        </Head>
         <p>Loading...</p>
       </Layout>
     )
 
   return (
     <Layout>
+      <Head>
+        <title>Cutie Hack | Check In</title>
+      </Head>
       {session && (
         <>
           <h1>Check In</h1>
