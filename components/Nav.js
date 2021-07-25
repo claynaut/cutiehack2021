@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link' // We should be using the Link component
+import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
@@ -81,12 +81,14 @@ export default function Nav() {
           <HiX className={styles.menuButton} />
         </div>
         <div id="nav" className={styles.tabs}>
-          <NavLink 
-            className={notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
-            onClick={() => setOpen(false)}
-          >
-            <Link href="/">Home</Link>
-          </NavLink>
+          <Link href="/">
+            <NavLink 
+              className={notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+              onClick={() => setOpen(false)}
+            >
+              Home
+            </NavLink>
+          </Link>
           <NavLink
             activeClass="active"
             to="Home"
@@ -164,7 +166,7 @@ export default function Nav() {
             <>
               {!checkedIn &&
                 <Link passHref href="/checkin">
-                  <motion.a
+                  <motion.button
                     aria-label="Check In Button"
                     type="button"
                     variants={buttonVariants}
@@ -174,12 +176,12 @@ export default function Nav() {
                     className={styles.primarybutton}
                   >
                     Check In
-                  </motion.a>
+                  </motion.button>
                 </Link>
               }
               {inGroup &&
                 <Link passHref href={"/groups/" + groupId}>
-                  <motion.a
+                  <motion.button
                     aria-label="View Group Button"
                     type="button"
                     variants={buttonVariants}
@@ -189,7 +191,7 @@ export default function Nav() {
                     className={styles.primarybutton}
                   >
                     View Your Group
-                  </motion.a>
+                  </motion.button>
                 </Link>
               }
               <motion.button
