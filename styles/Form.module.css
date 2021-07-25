@@ -1,15 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .button {
   display: flex;
   width: 28rem;
   height: 3rem;
-  margin: 0.7rem 0;
+  margin: 0.3rem 0;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: inherit;
+  border: none;
   border-radius: 0.2rem;
   background-color: #dacbb2;
-  border: none;
+  font-size: 1.2rem;
+  color: var(--brand-darkest);
   transition: all 100ms ease-in-out;
   cursor: pointer;
 }
@@ -19,12 +29,20 @@
   box-shadow: 0 6px 16px 0 rgba(98, 99, 99, 0.1);
 }
 
+.home {
+  background-color: var(--brand-light);
+  color: var(--bg);
+}
+
+.home:hover {
+  background-color: #d0901b;
+}
+
 .inputWrapper {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: left;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .inputHeader {
@@ -136,4 +154,25 @@
 
 .triggeredBox {
   border: 2px solid #f55b5b;
+}
+
+@media (max-width: 420px) {
+  .button{
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .button,
+  .inputWrapper,
+  .inputBox,
+  .dropdownHeader,
+  .dropdownContent,
+  .radio {
+    width: 100%;
+  }
+  
+  .dropdownContent div {
+    width: inherit;
+  }
 }

@@ -1,10 +1,13 @@
-import React from 'react'
-import Layout from '../components/Layout'
-import styles from '../styles/Index.module.css'
-import formStyles from '../styles/Form.module.css'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
 import { providers, signIn, getSession } from 'next-auth/client'
 import { useRouter } from 'next/dist/client/router'
+import { motion } from 'framer-motion'
+
+import Layout from '../components/Layout'
+
+import styles from '../styles/Form.module.css'
 
 const SignInError = ({ error }) => {
   const errors = {
@@ -32,34 +35,62 @@ export default function SignIn({ providers }) {
     query: { callbackUrl, error },
   } = useRouter()
 
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.02 },
+      tap: { scale: 0.997 },
+    }
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 720)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+  })
+
   return (
     <Layout>
-      <div className={styles.container}>
-        {error && (
-          <div className={formStyles.errorMsg}>
-            <SignInError error={error} />
-          </div>
-        )}
-        {Object.values(providers).map((provider) => {
-          if (provider.name === 'Email') {
-            return
-          }
-          return (
-            <motion.button
-              aria-label="Provider Sign In Button"
-              type="button"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.997 }}
-              transition={{ ease: 'easeInOut', duration: 0.015 }}
-              key={provider.name}
-              className={formStyles.button}
-              onClick={() => signIn(provider.id)}
-            >
-              Sign in with {provider.name}
-            </motion.button>
-          )
-        })}
-      </div>
+      <Head>
+        <title>Cutie Hack | Sign In</title>
+      </Head>
+      {error && (
+        <div className={styles.errorMsg}>
+          <SignInError error={error} />
+        </div>
+      )}
+      {Object.values(providers).map((provider) => {
+        return (
+          <motion.button
+            aria-label="Provider Sign In Button"
+            type="button"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ ease: 'easeInOut', duration: 0.015 }}
+            key={provider.name}
+            className={styles.button}
+            onClick={() => signIn(provider.id)}
+          >
+            Sign in with {provider.name}
+          </motion.button>
+        )
+      })}
+      <Link passHref href="/">
+        <motion.button
+          aria-label="Home Button"
+          type="button"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          transition={{ ease: 'easeInOut', duration: 0.015 }}
+          className={`${styles.button} ${styles.home}`}
+        >
+          Go Back to Homepage
+        </motion.button>
+      </Link>
     </Layout>
   )
 }

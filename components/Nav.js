@@ -1,94 +1,215 @@
-import React, { useEffect } from 'react'
-import Link from 'next/link' // We should be using the Link component
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { Link as NavLink } from 'react-scroll'
+import { useRouter } from 'next/router'
+
+import { HiMenu, HiX } from 'react-icons/hi'
 
 import styles from '../styles/Nav.module.css'
 
 export default function Nav() {
   const [session] = useSession()
-  const [checkedIn, setCheckedIn] = React.useState(false)
+  const router = useRouter()
 
-  const fetchData = async (name) => {
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.05 },
+      tap: { scale: 0.995 }
+    }
+
+  const [targetElement, setTargetElement] = useState(null)
+
+  const [checkedIn, setCheckedIn] = useState(false)
+  const [inGroup, setInGroup] = useState(false)
+  const [groupId, setGroupId] = useState('')
+  const [open, setOpen] = useState(false)
+  const [notHome, setNotHome] = useState(false)
+
+  const fetchData = async (id) => {
     const response = await fetch('/api/checkin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ session_data: name }),
+      body: JSON.stringify({ user: id }),
     })
     const data = await response.json()
     setCheckedIn(Object.keys(data.checkins).length !== 0)
+    if (data.checkins[0]) {
+      setInGroup(data.checkins[0].groupId !== '')
+      if (data.checkins[0].groupId !== '') {
+        setGroupId(data.checkins[0].groupId)
+      }
+    }
+  }
+
+  const toggle = () => {
+    setOpen(!open)
+  }
+
+  const handleResize = () => {
+    if (window.innerWidth > 720) setOpen(false)
+    setIsMobile(window.innerWidth <= 720)
   }
 
   useEffect(() => {
-    if (session) fetchData(session.user.name)
+    if (session) fetchData(session.user.id)
+
+    setNotHome(router.pathname !== '/')
+
+    window.addEventListener('resize', handleResize)
+    setTargetElement(document.querySelector('nav'))
+    if (targetElement) {
+      if (open) disableBodyScroll(targetElement)
+      else enableBodyScroll(targetElement)
+    }
   })
 
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.tabs}>
-        <Link href="/">Home</Link>
-        <a href="#">About</a>
-        <a href="#">FAQ</a>
-        <a href="#">Help</a>
-        <a href="#sponsors">Sponsors</a>
-        {!session ? (
-          <motion.button
-            aria-label="Sign In Button"
-            type="button"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.995 }}
-            transition={{ ease: 'easeInOut', duration: 0.015 }}
-            className={styles.primarybutton}
-            onClick={signIn}
-          >
-            Sign in
-          </motion.button>
-        ) : (
-          <>
-            {!checkedIn &&/* replace with variable to check if user already checked in */
-              <Link passHref href="/checkin">
-                <motion.a
-                  aria-label="Sign In Button"
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.995 }}
-                  transition={{ ease: 'easeInOut', duration: 0.015 }}
-                  className={styles.primarybutton}
-                >
-                  Check In
-                </motion.a>
-              </Link>
-            }
-            {false && /* replace with variable to check if user already in a group */
-              <Link passHref href="/groups/create">
-                <motion.a
-                  aria-label="View Group Button"
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.995 }}
-                  transition={{ ease: 'easeInOut', duration: 0.015 }}
-                  className={styles.primarybutton}
-                >
-                  View Your Group
-                </motion.a>
-              </Link>
-            }
-            <motion.button
-              aria-label="Sign Out Button"
-              type="button"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.995 }}
-              transition={{ ease: 'easeInOut', duration: 0.015 }}
-              className={styles.secondarybutton}
-              onClick={signOut}
+    <span className={open && styles.open}>
+      <nav className={styles.navbar}>
+        <div 
+          className={styles.menuButtonWrapper}
+          onClick={() => toggle()}
+        >
+          <HiMenu className={styles.menuButton} />
+          <HiX className={styles.menuButton} />
+        </div>
+        <div id="nav" className={styles.tabs}>
+          <Link href="/">
+            <NavLink 
+              className={notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+              onClick={() => setOpen(false)}
             >
-              Sign out
+              Home
+            </NavLink>
+          </Link>
+          <NavLink
+            activeClass="active"
+            to="Home"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className={!notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+            onClick={() => setOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            activeClass="active"
+            to="About"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className={!notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+            onClick={() => setOpen(false)}
+          >
+            About
+          </NavLink>
+          <NavLink
+            activeClass="active"
+            to="FAQ"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className={!notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+            onClick={() => setOpen(false)}
+          >
+            FAQ
+          </NavLink>
+          <NavLink
+            activeClass="active"
+            to="Help"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className={!notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+            onClick={() => setOpen(false)}
+          >
+            Help
+          </NavLink>
+          <NavLink
+            activeClass="active"
+            to="Sponsors"
+            spy={true}
+            smooth={true}
+            offset={-70}
+            duration={500}
+            className={!notHome ? `${styles.tab}` : `${styles.hidetabs} ${styles.tab}`}
+            onClick={() => setOpen(false)}
+          >
+            Sponsors
+          </NavLink>
+          {!session ? (
+            <motion.button
+              aria-label="Sign In Button"
+              type="button"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              transition="ease"
+              className={styles.primarybutton}
+              onClick={signIn}
+            >
+              Sign in
             </motion.button>
-          </>
-        )}
-      </div>
-    </nav>
+          ) : (
+            <>
+              {!checkedIn &&
+                <Link passHref href="/checkin">
+                  <motion.button
+                    aria-label="Check In Button"
+                    type="button"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    transition={{ ease: 'easeInOut', duration: 0.015 }}
+                    className={styles.primarybutton}
+                  >
+                    Check In
+                  </motion.button>
+                </Link>
+              }
+              {inGroup &&
+                <Link passHref href={"/groups/" + groupId}>
+                  <motion.button
+                    aria-label="View Group Button"
+                    type="button"
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    transition={{ ease: 'easeInOut', duration: 0.015 }}
+                    className={styles.primarybutton}
+                  >
+                    View Your Group
+                  </motion.button>
+                </Link>
+              }
+              <motion.button
+                aria-label="Sign Out Button"
+                type="button"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                transition={{ ease: 'easeInOut', duration: 0.015 }}
+                className={styles.secondarybutton}
+                onClick={signOut}
+              >
+                Sign out
+              </motion.button>
+            </>
+          )}
+        </div>
+      </nav>
+    </span>
   )
 }

@@ -1,9 +1,11 @@
 .navbar {
-  z-index: 10;
+  z-index: 20;
   position: fixed;
   padding: 1.5rem 0;
   top: 0;
   width: 100%;
+  max-height: 5.5rem;
+  overflow-y: hidden;
   background-color: var(--nav-bg);
   backdrop-filter: saturate(180%) blur(20px);
   -moz-backdrop-filter: saturate(180%) blur(20px);
@@ -18,9 +20,35 @@
   margin-right: 20px;
 }
 
-.tabs > a {
+.tabs .tab {
+  display: inline-block;
+  position: relative;
   font-weight: 750;
   font-size: large;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tabs .tab:hover {
+  color: var(--brand);
+}
+
+.tabs .tab::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 0.2rem;
+  bottom: 0;
+  left: 0;
+  background-color: var(--brand);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.tabs .tab:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 .primarybutton,
@@ -52,8 +80,58 @@
   color: #fff9ef;
 }
 
+.hidetabs {
+  display: none !important;
+}
+
+.menuButtonWrapper {
+  display: none;
+  margin-bottom: 2rem;
+}
+
+.menuButton {
+  font-size: 2rem;
+}
+
 @-moz-document url-prefix(){
   .navbar {
     background: var(--nav-bg-moz);
+  }
+}
+
+@media (max-width: 720px) {
+  .tabs {
+    flex-direction: column;
+    margin-right: 0;
+  }
+  .menuButtonWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 20px;
+  }
+  .menuButton {
+    transition: transform 150ms ease-in-out;
+  }
+  .menuButton:nth-of-type(1) {
+    position: relative;
+    visibility: visible;
+  }
+  .menuButton:nth-of-type(2) {
+    position: absolute;
+    visibility: hidden;
+  }
+  .open .menuButton:nth-of-type(1) {
+    visibility: hidden;
+    transform: rotate(90deg);
+  }
+  .open .menuButton:nth-of-type(2) {
+    visibility: visible;
+    transform: rotate(90deg);
+  }
+
+  .open .navbar {
+    height: 100vh;
+    max-height: 100vh;
   }
 }

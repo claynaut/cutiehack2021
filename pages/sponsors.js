@@ -1,28 +1,53 @@
+import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
+
 import { FaChevronRight } from 'react-icons/fa'
 
-import styles from '../styles/Index.module.css'
-import sponsorsStyles from '../styles/Sponsors.module.css'
+import styles from '../styles/Sponsors.module.css'
 
 export default function Sponsors() {
+  const [isMobile, setIsMobile] = useState(false)
+  var buttonVariants = {}
+  if (!isMobile)
+    buttonVariants = {
+      hover: { scale: 1.05 },
+      tap: { scale: 0.995 },
+    }
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 720)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+  })
+
   return (
     <main className={styles.main}>
-      <div className={styles.sponsors}>
-        <h1>Sponsors</h1>
+      <Head>
+        <title>Cutie Hack | Sponsors</title>
+      </Head>
+      <div className={styles.wrapper}>
+        <h1 className={styles.header}>Sponsors</h1>
         <p>Those who made this hackathon possible.</p>
-        <motion.div whileTap={{ scale: 0.9 }}>
-          {/* "sponser us" form */}
-          <a href="#">
-            <div className={sponsorsStyles.icon}>
-              <div className={sponsorsStyles.iconTextWrapper}>
-                Sponsor Us <FaChevronRight className={sponsorsStyles.arrow} />
-              </div>
+        <Link passHref href="/">
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ ease: 'easeInOut', duration: 0.015 }}
+            className={styles.button}
+          >
+            <div className={styles.iconTextWrapper}>
+              <div>Sponsor Us</div>
+              <FaChevronRight className={styles.arrow} />
             </div>
-          </a>
-        </motion.div>
+          </motion.div>
+        </Link>
         <div>
           {/* sponsor logos */}
-          <a href="#"></a>
         </div>
       </div>
     </main>
