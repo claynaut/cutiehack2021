@@ -11,11 +11,9 @@
 
 .header {
   margin-bottom: 1rem;
-  padding: 0.2rem 0;
-  border-top: 2px solid var(--brand);
-  border-bottom: 2px solid var(--brand);
-  font-weight: 700;
-  color: var(--brand);
+  color: var(--brand-dark);
+  border-top: 2px solid var(--brand-dark);
+  border-bottom: 2px solid var(--brand-dark);
 }
 
 .number {
@@ -67,7 +65,7 @@
 
 @media (max-width: 375px) {
   .header {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   .number * {
     margin: 0 0.1rem;
@@ -103,7 +101,7 @@
 
 @media (min-width: 420px) and (max-width: 530px) {
   .header {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
   .number * {
     margin: 0 0.1rem;
