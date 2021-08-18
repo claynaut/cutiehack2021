@@ -106,11 +106,11 @@ export default function Home() {
           <h1 className={styles.title}>better together</h1>
           <p className={styles.description}>a beginner friendly hackathon</p>
           <div>
-            {/* {session && (
-              <h1 className={styles.greeting}>
+            {session && (
+              <h2 className={styles.greeting}>
                 Glad to have you, {session.user.name}!
-              </h1>
-            )} */}
+              </h2>
+            )}
             <div>
               <CountdownWrapper />
               {/* <SignupCounter />
