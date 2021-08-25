@@ -79,15 +79,16 @@ export default function Home() {
   return (
     <>
       <div className={styles.bgWrap}>
-        <Image
-          src={heroLeft}
-          alt="Hero Image"
-          objectFit="contain"
-          quality={50}
-          placeholder="blur"
-          priority={true}
-          className={styles.heroLeft}
-        />
+        <div className={styles.heroLeft}>
+          <Image
+            src={heroLeft}
+            alt="Hero Image"
+            objectFit="contain"
+            quality={50}
+            placeholder="blur"
+            priority={true}
+          />
+        </div>
         <section className={styles.main}>
           <h1>
             <span className={styles.subintrotext}>
@@ -102,17 +103,20 @@ export default function Home() {
               hack presents:
             </span>
           </h1>
-
           <h1 className={styles.title}>better together</h1>
           <p className={styles.description}>a beginner friendly hackathon</p>
+          <h2 className={styles.date}>starting november 6, 2021</h2>
           <div>
-            {session && (
+            {/* {session && (
               <h2 className={styles.greeting}>
                 Glad to have you, {session.user.name}!
               </h2>
-            )}
+            )} */}
             <div>
-              <CountdownWrapper />
+              <CountdownWrapper 
+                date='2021-11-06T09:00:00'
+                heading='days left until start'
+              />
               {/* <SignupCounter />
               {!session && (
                 <div className={styles.actionwrapper}>
@@ -210,15 +214,16 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <Image
-          src={heroRight}
-          alt="Hero Image"
-          objectFit="contain"
-          quality={50}
-          placeholder="blur"
-          priority={true}
-          className={styles.heroRight}
-        />
+        <div className={styles.heroRight}>
+          <Image
+            src={heroRight}
+            alt="Hero Image"
+            objectFit="contain"
+            quality={50}
+            placeholder="blur"
+            priority={true}
+          />
+        </div>
       </div>
     </>
   )

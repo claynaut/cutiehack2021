@@ -187,7 +187,7 @@ export default function Nav() {
                   >
                     about
                   </NavLink>
-                  {/* <NavLink
+                  <NavLink
                     activeClass="active"
                     to="Support"
                     spy={true}
@@ -199,7 +199,7 @@ export default function Nav() {
                   >
                     support
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     activeClass="active"
                     to="Sponsors"
                     spy={true}
