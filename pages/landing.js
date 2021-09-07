@@ -112,9 +112,9 @@ export default function Home() {
               </h2>
             )}
             <div>
-              <CountdownWrapper 
-                date='2021-11-06T09:00:00'
-                heading='starting november 6, 2021'
+              <CountdownWrapper
+                date="2021-11-06T09:00:00"
+                heading="starting november 6, 2021"
               />
               <SignupCounter />
               {!session && (
@@ -162,7 +162,7 @@ export default function Home() {
                   </Link>
                 </div>
               )}
-              {session && isMobile && inGroup && (
+              {/* {session && isMobile && inGroup && (
                 <div className={styles.actionwrapper}>
                   <Link passHref href={'/groups/' + groupId}>
                     <motion.button
@@ -209,7 +209,7 @@ export default function Home() {
                     </motion.button>
                   </Link>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </section>

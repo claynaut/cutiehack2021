@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { signIn, signOut, useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { Link as NavLink } from 'react-scroll'
 import { useRouter } from 'next/router'
+import ProfileDropdown from './ProfileDropdown'
 
 import { HiMenu, HiX } from 'react-icons/hi'
 import logo from '../public/assets/logo.png'
@@ -29,6 +30,7 @@ export default function Nav() {
   const [checkedIn, setCheckedIn] = useState(false)
   const [inGroup, setInGroup] = useState(false)
   const [groupId, setGroupId] = useState('')
+  const [appStatus, setAppStatus] = useState('')
   const [open, setOpen] = useState(false)
 
   const fetchData = async (id) => {
@@ -42,15 +44,12 @@ export default function Nav() {
     const data = await response.json()
     setCheckedIn(Object.keys(data.checkins).length !== 0)
     if (data.checkins[0]) {
+      setAppStatus(data.checkins[0].qualified)
       setInGroup(data.checkins[0].groupId !== '')
       if (data.checkins[0].groupId !== '') {
         setGroupId(data.checkins[0].groupId)
       }
     }
-  }
-
-  const toggle = () => {
-    setOpen(!open)
   }
 
   const handleResize = () => {
@@ -111,6 +110,15 @@ export default function Nav() {
           )}
           <div>
             <div className={styles.mobileHeader}>
+              {isMobile && 
+                <ProfileDropdown 
+                  visible={!open}
+                  checkedIn={checkedIn}
+                  inGroup={inGroup}
+                  groupId={groupId}
+                  appStatus={appStatus}
+                />
+              }
               {router.pathname !== '/' ? (
                 <Link passHref href="/">
                   <div className={styles.mobileLogo}>
@@ -147,16 +155,15 @@ export default function Nav() {
                   </div>
                 </NavLink>
               )}
-
               <div
                 className={styles.menuButtonWrapper}
-                onClick={() => toggle()}
+                onClick={() => setOpen(!open)}
               >
                 <HiMenu className={styles.menuButton} />
                 <HiX className={styles.menuButton} />
               </div>
             </div>
-            <div id="nav" className={styles.tabs}>
+            <div id="nav" className={open ? `${styles.mobileOpen} ${styles.tabs}` : `${styles.tabs}`}>
               {router.pathname !== '/' ? (
                 <Link href="/" passHref onClick={() => setOpen(false)}>
                   <div className={styles.tab}>home</div>
@@ -268,33 +275,15 @@ export default function Nav() {
                       </motion.button>
                     </Link>
                   )}
-                  {inGroup && (
-                    <Link passHref href={'/groups/' + groupId}>
-                      <motion.button
-                        aria-label="View Group Button"
-                        type="button"
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                        transition={{ ease: 'easeInOut', duration: 0.015 }}
-                        className={styles.primarybutton}
-                      >
-                        View Your Group
-                      </motion.button>
-                    </Link>
-                  )}
-                  <motion.button
-                    aria-label="Sign Out Button"
-                    type="button"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    transition={{ ease: 'easeInOut', duration: 0.015 }}
-                    className={styles.secondarybutton}
-                    onClick={signOut}
-                  >
-                    Sign out
-                  </motion.button>
+                  {!isMobile && 
+                    <ProfileDropdown 
+                      visible={true}
+                      checkedIn={checkedIn}
+                      inGroup={inGroup}
+                      groupId={groupId}
+                      appStatus={appStatus}
+                    />
+                  }
                 </>
               )}
             </div>

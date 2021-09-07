@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 
 import Layout from '../../components/Layout'
+import JoinGroupForm from '../../components/JoinGroupForm'
 
 import styles from '../../styles/Form.module.css'
 
@@ -24,7 +25,7 @@ export default function Groups() {
     }
 
   const [inGroup, setInGroup] = useState(false)
-  const [groupId, setGroupId] = useState('')
+  const [appStatus, setAppStatus] = useState('')
 
   const fetchData = async (userId) => {
     const response = await fetch('/api/checkin', {
@@ -42,9 +43,21 @@ export default function Groups() {
       })
     }
     if (data.checkins[0]) {
-      setInGroup(data.checkins[0].groupId !== '')
-      if (data.checkins[0].groupId !== '') {
-        setGroupId(data.checkins[0].groupId)
+      setAppStatus(data.checkins[0].qualified)
+      if (data.checkins[0].qualified !== 'yes') {
+        router.push('/')
+        toast.error(
+          'Access denied. Application has not been approved yet or has been denied.',
+          {
+            id: 'notQualifiedYetError',
+          }
+        )
+      } else {
+        setInGroup(data.checkins[0].groupId !== '')
+        if (data.checkins[0].groupId !== '') {
+          const dst = '/groups/' + data.checkins[0].groupId.toString()
+          router.push(dst)
+        }
       }
     }
   }
@@ -80,7 +93,7 @@ export default function Groups() {
     }
   }, [loading, session, router])
 
-  if (loading)
+  if (loading || appStatus !== 'yes' || inGroup)
     return (
       <Layout>
         <Head>
@@ -95,22 +108,19 @@ export default function Groups() {
       <Head>
         <title>Cutie Hack | Groups</title>
       </Head>
-      {inGroup ? (
-        <Link passHref href={'/groups/' + groupId}>
-          <motion.button
-            aria-label="View Group Button"
-            type="button"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            transition={{ ease: 'easeInOut', duration: 0.015 }}
-            className={styles.button}
-          >
-            View Your Group
-          </motion.button>
-        </Link>
-      ) : (
-        <>
+      <div className={styles.groupbuttonWrapper}>
+        <div>
+          <div className={styles.groupbuttonHeader}>
+            <h2>Join a Group</h2>
+            <p>Have a group to join? Enter the invite code below!</p>
+          </div>
+          <JoinGroupForm />
+        </div>
+        <div>
+          <div className={styles.groupbuttonHeader}>
+            <h2>Create a Group</h2>
+            <p>Don&apos;t have a group to join? Create your own below!</p>
+          </div>
           <motion.button
             aria-label="Create Group Button"
             type="button"
@@ -123,21 +133,8 @@ export default function Groups() {
           >
             Create Group
           </motion.button>
-          <Link passHref href="/groups/join">
-            <motion.button
-              aria-label="Join Group Button"
-              type="button"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              transition={{ ease: 'easeInOut', duration: 0.015 }}
-              className={styles.button}
-            >
-              Join a Group
-            </motion.button>
-          </Link>
-        </>
-      )}
+        </div>
+      </div>
       <Link passHref href="/">
         <motion.button
           aria-label="Home Button"
