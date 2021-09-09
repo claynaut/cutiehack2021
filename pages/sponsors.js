@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { FaChevronRight } from 'react-icons/fa'
+
+import Soap from '../public/assets/soap.png'
 
 import styles from '../styles/Sponsors.module.css'
 
@@ -40,7 +43,7 @@ export default function Sponsors() {
       <div className={styles.wrapper}>
         <h1>the sponsors</h1>
         <h3>Those who made this hackathon possible.</h3>
-        <Link passHref href="/">
+        <Link passHref href='https://drive.google.com/file/d/1AyY_BiIUhbllUf5h7zoz3f1Hs1LpncG4/view?usp=sharing'>
           <motion.button
             variants={buttonVariants}
             whileHover="hover"
@@ -52,7 +55,110 @@ export default function Sponsors() {
             <FaChevronRight className={styles.arrow} />
           </motion.button>
         </Link>
-        <div>{/* sponsor logos */}</div>
+        {/* <div className={styles.grid}>
+          <div className={styles.group}>
+            <div className={styles.big}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.big}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.big}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+          </div>
+          <div className={styles.group}>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.medium}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+          </div>
+          <div className={styles.group}>
+            <div className={styles.small}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.small}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+            <div className={styles.small}>
+              <Image
+                src={Soap}
+                layout='responsive'
+                quality={100}
+                alt='placeholder'
+              />
+            </div>
+          </div>
+        </div> */}
       </div>
     </section>
   )

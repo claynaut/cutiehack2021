@@ -105,34 +105,34 @@ export default function Home() {
           </h1>
           <h1 className={styles.title}>better together</h1>
           <p className={styles.description}>a beginner friendly hackathon</p>
-          <h2 className={styles.date}>starting november 6, 2021</h2>
           <div>
             {/* {session && (
               <h2 className={styles.greeting}>
-                Glad to have you, {session.user.name}!
+                glad to have you, {session.user.name}!
               </h2>
             )} */}
             <div>
-              <CountdownWrapper 
-                date='2021-11-06T09:00:00'
-                heading='days left until start'
+              <CountdownWrapper
+                date="2021-11-06T09:00:00"
+                heading="starting november 6, 2021"
               />
-              {/* <SignupCounter />
+              {/* <SignupCounter /> */}
               {!session && (
                 <div className={styles.actionwrapper}>
-                  <motion.button
-                    aria-label="Sponsor Button"
-                    type="button"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    transition={{ ease: 'easeInOut', duration: 0.015 }}
-                    className={styles.secondarybutton}
-                    // onClick={signIn} change this to sponsor packet
-                  >
-                    sponsor
-                  </motion.button>
-                  <motion.button
+                  <Link passHref href='https://drive.google.com/file/d/1AyY_BiIUhbllUf5h7zoz3f1Hs1LpncG4/view?usp=sharing'>
+                    <motion.button
+                      aria-label="Sponsor Button"
+                      type="button"
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      transition={{ ease: 'easeInOut', duration: 0.015 }}
+                      className={styles.secondarybutton}
+                    >
+                      sponsor
+                    </motion.button>
+                  </Link>
+                  {/* <motion.button
                     aria-label="Sign In Button"
                     type="button"
                     variants={buttonVariants}
@@ -143,10 +143,10 @@ export default function Home() {
                     onClick={signIn}
                   >
                     apply
-                  </motion.button>
+                  </motion.button> */}
                 </div>
               )}
-              {session && isMobile && !checkedIn && (
+              {/* {session && isMobile && !checkedIn && (
                 <div className={styles.actionwrapper}>
                   <Link passHref href="/checkin">
                     <motion.button
@@ -159,54 +159,6 @@ export default function Home() {
                       className={styles.primarybutton}
                     >
                       Check In
-                    </motion.button>
-                  </Link>
-                </div>
-              )}
-              {session && isMobile && inGroup && (
-                <div className={styles.actionwrapper}>
-                  <Link passHref href={'/groups/' + groupId}>
-                    <motion.button
-                      aria-label="View Group Button"
-                      type="button"
-                      variants={buttonVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                      transition={{ ease: 'easeInOut', duration: 0.015 }}
-                      className={styles.primarybutton}
-                    >
-                      View Your Group
-                    </motion.button>
-                  </Link>
-                </div>
-              )}
-              {session && checkedIn && !inGroup && (
-                <div className={styles.actionwrapper}>
-                  <motion.button
-                    aria-label="Create Group Button"
-                    type="button"
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    transition={{ ease: 'easeInOut', duration: 0.015 }}
-                    className={styles.primarybutton}
-                    onClick={() =>
-                      createGroup(session.user.id, session.user.name)
-                    }
-                  >
-                    Create Group
-                  </motion.button>
-                  <Link passHref href="/groups/join">
-                    <motion.button
-                      aria-label="Join Group Button"
-                      type="button"
-                      variants={buttonVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                      transition={{ ease: 'easeInOut', duration: 0.015 }}
-                      className={styles.primarybutton}
-                    >
-                      Join a Group
                     </motion.button>
                   </Link>
                 </div>

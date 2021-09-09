@@ -4,7 +4,7 @@ import { connectToDatabase } from '../../../util/mongodb'
 export default async function CreateCheckIn(req: NextApiRequest, res: NextApiResponse) {
   const { db } = await connectToDatabase();
   const {
-    user: [ name, email, race, gender, school, major, grade, first_time, id ]
+    user: [ name, email, race, gender, school, major, grade, first_time, grad, id ]
   } = req.body;
   
   const result = await db.collection('checkins').insertOne({
@@ -16,12 +16,14 @@ export default async function CreateCheckIn(req: NextApiRequest, res: NextApiRes
     major: major,
     grade: grade,
     firstTimeHacker: first_time,
+    graduate: grad,
     userId: id,
+    qualified: '',
     groupId: '',
     createdAt: new Date()
   });
 
-  console.log(result.ops[0]);
+  // console.log(result.ops[0]);
 
   res.status(200);
   res.json({});

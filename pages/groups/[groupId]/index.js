@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Layout from '../../../components/Layout'
+import Modal from '../../../components/Modal'
 
 import { MdContentCopy } from 'react-icons/md'
 import { FaRegCircle } from 'react-icons/fa'
@@ -27,8 +28,15 @@ export default function GroupPage() {
       tap: { scale: 0.997 },
     }
 
+  const [leaveModalOpen, setLeaveModalOpen] = useState(false)
+  const toggleLeaveModal = () => {
+    setLeaveModalOpen(!leaveModalOpen)
+  }
+
   const [groupId, setGroupId] = useState('')
   const [users, setUsers] = useState([])
+  const [appStatus, setAppStatus] = useState('')
+  const [groupMatch, setgroupMatch] = useState(false)
 
   const fetchData = async (userId) => {
     const response = await fetch('/api/checkin', {
@@ -45,6 +53,20 @@ export default function GroupPage() {
         id: 'notCheckedInGroupPageError',
       })
     }
+    if (data.checkins[0]) {
+      setAppStatus(data.checkins[0].qualified)
+      if (data.checkins[0].qualified !== 'yes') {
+        router.push('/')
+        toast.error(
+          'Access denied. Application has not been approved yet or has been denied.',
+          {
+            id: 'notQualifiedYetError',
+          }
+        )
+      } else {
+        checkValidGroup()
+      }
+    }
   }
 
   const fetchLastURLSegment = async () => {
@@ -56,6 +78,7 @@ export default function GroupPage() {
   const checkValidGroup = async () => {
     const groupId = await fetchGroupId(session.user.id)
     const lastURLSegment = await fetchLastURLSegment()
+    setgroupMatch(groupId === lastURLSegment)
 
     if (groupId !== lastURLSegment) {
       router.push('/')
@@ -150,11 +173,10 @@ export default function GroupPage() {
       })
     } else if (session) {
       fetchData(session.user.id)
-      checkValidGroup()
     }
   }, [loading, session, router])
 
-  if (loading)
+  if (loading || appStatus !== 'yes' || !groupMatch)
     return (
       <Layout>
         <Head>
@@ -198,18 +220,20 @@ export default function GroupPage() {
           </div>
         ))}
       </div>
-      <motion.button
-        aria-label="Leave Group Button"
-        type="button"
-        variants={buttonVariants}
-        whileHover="hover"
-        whileTap="tap"
-        transition={{ ease: 'easeInOut', duration: 0.015 }}
-        className={formStyles.button}
-        onClick={() => leaveGroup(session.user.id)}
-      >
-        Leave Group
-      </motion.button>
+      <div className={formStyles.groupbuttonWrapper}>
+        <motion.button
+          aria-label="Leave Group Button"
+          type="button"
+          variants={buttonVariants}
+          whileHover="hover"
+          whileTap="tap"
+          transition={{ ease: 'easeInOut', duration: 0.015 }}
+          className={formStyles.button}
+          onClick={() => toggleLeaveModal()}
+        >
+          Leave Group
+        </motion.button>
+      </div>
       <Link passHref href="/">
         <motion.button
           aria-label="Home Button"
@@ -223,6 +247,39 @@ export default function GroupPage() {
           Go Back to Homepage
         </motion.button>
       </Link>
+      <Modal
+        show={leaveModalOpen}
+        handler={toggleLeaveModal}
+        header="Leave Group?"
+        caption="If you leave, you will need to be reinvited by the remaining members. If no one else is left in the group, the group will be deleted."
+      >
+        <div className={styles.buttonWrapper}>
+          <motion.button
+            aria-label="Confirm Leave Button"
+            type="button"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ ease: 'easeInOut', duration: 0.015 }}
+            className={`${formStyles.button} ${formStyles.danger}`}
+            onClick={() => leaveGroup(session.user.id)}
+          >
+            Confirm
+          </motion.button>
+          <motion.button
+            aria-label="Cancel Leave Button"
+            type="button"
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ ease: 'easeInOut', duration: 0.015 }}
+            className={`${formStyles.button} ${formStyles.cancel}`}
+            onClick={() => toggleLeaveModal()}
+          >
+            Cancel
+          </motion.button>
+        </div>
+      </Modal>
     </Layout>
   )
 }
