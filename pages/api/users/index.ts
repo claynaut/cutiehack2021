@@ -5,11 +5,9 @@ export default async function FetchUsers(req: NextApiRequest, res: NextApiRespon
   try {
     const { db } = await connectToDatabase();
     const users = await db.collection('users').find().toArray();
-    res.status(200);
-    res.json({ users });
+    res.status(200).json({ users });
   }
   catch {
-    res.status(500);
-    res.json({ error: "Unable to fetch groups..."});
+    res.status(500).json({ error: "Unable to fetch users..."});
   }
 }
