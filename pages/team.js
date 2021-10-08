@@ -57,7 +57,7 @@ export default function Team() {
       height: '1024',
       name: 'mariam golwalla',
       role: 'sponsorship lead',
-      linkedin: '/',
+      linkedin: 'https://www.linkedin.com/in/mariam-golwalla-74930949/',
     },
     {
       image: Marshall,
@@ -139,6 +139,7 @@ export default function Team() {
               <div>Jonathon Chon</div>
               <div>Andrei Dimaano</div>
               <div>Minsoo Kim</div>
+              <div>Justin Mazon</div>
               <div>Aaron Van</div>
               <div>James Zhang</div>
               <div>Sophie Zhu</div>

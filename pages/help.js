@@ -68,9 +68,9 @@ export default function Help() {
         <p>
           <b>Volunteers</b>
           <br />
-          Volunteers help out with the majority of the day-of event including
-          but not limited to matching hackers to mentors, helping hackers find
-          teams, hosting activities, and answering general questions.
+          Volunteers help out with the majority of day-of event  tasks including, but
+          not limited to, matching hackers to mentors matching hackers to mentors, helping
+          hackers find teams, hosting activities, and answering general questions.
         </p>
         <p>
           <b>Sponsors</b>
@@ -106,14 +106,14 @@ export default function Help() {
           </Link>
           <Link
             passHref
-            href="https://drive.google.com/file/d/1AyY_BiIUhbllUf5h7zoz3f1Hs1LpncG4/view?usp=sharing"
+            href="/sponsor-us"
           >
             <motion.button
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               transition={{ ease: 'easeInOut', duration: 0.015 }}
-              className={styles.button}
+              className={`${styles.button} ${styles.sponsorbutton}`}
             >
               <span>sponsor us</span>
               <FaChevronRight className={styles.arrow} />
