@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { signIn, useSession } from 'next-auth/client'
 import { motion } from 'framer-motion'
+import { FaChevronRight } from 'react-icons/fa'
 
 import CountdownWrapper from '../components/Countdown'
 import SignupCounter from '../components/SignupCounter'
@@ -93,7 +94,7 @@ export default function Home() {
               <div className={styles.actionwrapper}>
                 <Link
                   passHref
-                  href="https://drive.google.com/file/d/1AyY_BiIUhbllUf5h7zoz3f1Hs1LpncG4/view?usp=sharing"
+                  href="/sponsor-us"
                 >
                   <motion.button
                     aria-label="Sponsor Button"
@@ -102,9 +103,10 @@ export default function Home() {
                     whileHover="hover"
                     whileTap="tap"
                     transition={{ ease: 'easeInOut', duration: 0.015 }}
-                    className={styles.secondarybutton}
+                    className={`${styles.secondarybutton} ${styles.sponsorbutton}`}
                   >
-                    sponsor
+                    <span>sponsor us</span>
+                    <FaChevronRight className={styles.arrow} />
                   </motion.button>
                 </Link>
                 <motion.button

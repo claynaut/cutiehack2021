@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import slice from '../public/assets/slice.png'
 
 import styles from '../styles/Faq.module.css'
@@ -9,6 +10,24 @@ export default function Faq() {
     {
       question: 'What is a hackathon?',
       answer: 'A hackathon is an event where teams or inviduals rush to make a creative project. Throughout, there will be free workshops intended to guide you in creating your project. At the end of the time slot, contestants have the opportunity to demo their projects to judges and win prizes.'
+    },
+    {
+      question: 'How do I apply?',
+      answer: 
+        <>
+          You can apply be <Link passHref href='/signin'><span className={styles.link}>signing in first</span></Link> with your Github, Google, or LinkedIn account and filling out the check-in form. The check-in form is accessible on the website after signing in.
+        </>
+    },
+    {
+      question: 'How much does it cost?',
+      answer: 'Applying and attending Cutie Hack is completely free! You’ll get access to mentors, workshops, and prizes at no extra cost.'
+    },
+    {
+      question: 'Where is the event?',
+      answer: 
+        <>
+          The COVID-19 pandemic caused our event to go fully online. We will mostly be using <Link passHref href='https://discord.com/'><span className={styles.link}>Discord</span></Link> as our main platform, so be sure to get an account before you apply! An invite link to our server will be sent via email to those who will be participating.
+        </>
     },
     {
       question: 'Where will we submit?',
@@ -25,6 +44,10 @@ export default function Faq() {
     {
       question: 'What will I need to participate?',
       answer: 'A working device (i.e your laptop or PC) and a stable internet connection. And, of course, you.'
+    },
+    {
+      question: 'I’m in high school, am I still eligible to apply?',
+      answer: 'Yes, we welcome anyone from any high school or college to come out and hack with us.'
     },
     {
       question: 'What if I don\'t have a team?',
@@ -65,19 +88,21 @@ export default function Faq() {
         <div className={styles.faq}>
           {faq.map(({ question, answer }, idx) =>
             <div key={idx} className={styles.questionAnswer}>
-              <div className={styles.slice}>
-                <Image
-                  alt='Cutie Slice'
-                  src={slice}
-                  width={201}
-                  height={135}
-                  quality={80}
-                  layout='responsive'
-                  objectFit='contain'
-                />
+              <div className={styles.question}>
+                <div className={styles.slice}>
+                  <Image
+                    alt='Cutie Slice'
+                    src={slice}
+                    width={201}
+                    height={135}
+                    quality={80}
+                    layout='responsive'
+                    objectFit='contain'
+                  />
+                </div>
+                <h3>{question}</h3>
               </div>
               <div>
-                <h3>{question}</h3>
                 <p>{answer}</p>
               </div>
             </div>
