@@ -110,7 +110,7 @@ export default function Nav() {
           )}
           <div>
             <div className={styles.mobileHeader}>
-              {/* {session &&
+              {session &&
                 <div className={styles.mobileProfile}>
                   <ProfileDropdown 
                     visible={!open}
@@ -120,7 +120,7 @@ export default function Nav() {
                     appStatus={appStatus}
                   />
                 </div>
-              } */}
+              }
               {router.pathname !== '/' ? (
                 <Link passHref href='/'>
                   <div className={styles.mobileLogo}>
@@ -243,6 +243,70 @@ export default function Nav() {
                     onClick={() => setOpen(false)}
                   >
                     faq
+                  </NavLink>
+                </>
+              )}
+              {router.pathname === '/live' && (
+                <>
+                  <NavLink
+                    activeClass='active'
+                    to='Schedule'
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                    className={styles.tab}
+                    onClick={() => setOpen(false)}
+                  >
+                    schedule
+                  </NavLink>
+                  <NavLink
+                    activeClass='active'
+                    to='Judges'
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                    className={styles.tab}
+                    onClick={() => setOpen(false)}
+                  >
+                    judges
+                  </NavLink>
+                  <NavLink
+                    activeClass='active'
+                    to='Resources'
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                    className={styles.tab}
+                    onClick={() => setOpen(false)}
+                  >
+                    resources
+                  </NavLink>
+                  <NavLink
+                    activeClass='active'
+                    to='Sponsors'
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                    className={styles.tab}
+                    onClick={() => setOpen(false)}
+                  >
+                    sponsors
+                  </NavLink>
+                  <NavLink
+                    activeClass='active'
+                    to='Team'
+                    spy={true}
+                    smooth={true}
+                    offset={-70}
+                    duration={500}
+                    className={styles.tab}
+                    onClick={() => setOpen(false)}
+                  >
+                    staff
                   </NavLink>
                 </>
               )}
