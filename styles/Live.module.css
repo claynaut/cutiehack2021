@@ -2,26 +2,27 @@
   width: 100%;
 }
 
-.section {
+.countdown {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 40rem;
 }
 
-.section2 {
+.schedule {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: var(--brand-lightest);
-  min-height: 80vh;
+  min-height: 60vh;
   padding: 0 1rem;
 }
 
-.wave2 {
+.schedule .wave {
   position: absolute;
   top: 0;
   left: 0;
@@ -30,7 +31,7 @@
   line-height: 0;
 }
 
-.wave2 svg {
+.schedule .wave svg {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
@@ -38,24 +39,93 @@
   transform: rotateY(180deg);
 }
 
-.wave2 .shapefill {
+.schedule .wave .shapefill {
   fill: var(--bg);
 }
 
-.section3 {
+.schedules {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.schedules > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 20rem;
+}
+
+.eventGroupTitle {
+  text-align: center;
+}
+
+.eventGroupTitle > h2 {
+  margin: 0;
+}
+
+.eventGroupTitle > p {
+  margin: 0;
+  margin-top: -0.5rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.event {
+  display: flex;
+  gap: 10px;
+  width: 100rem;
+  max-width: 20rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.3rem;
+  background-color: #fdc383;
+}
+
+.schedules > div:nth-of-type(2) > .event {
+  background-color: #f3975e;
+}
+
+.schedules > div:nth-of-type(3) > .event {
+  background-color: var(--brand-lighter);
+}
+
+.eventTime,
+.eventName {
+  font-weight: 700;
+}
+
+.schedules > div:nth-of-type(1) > .event > .eventTime {
+  color: var(--brand-dark);
+}
+
+.schedules > div:nth-of-type(2) > .event > .eventTime {
+  color: var(--brand-darkest);
+}
+
+.schedules > div:nth-of-type(3) > .event > .eventTime {
+  color: #c05e17;
+}
+
+.judges {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
+  min-height: 60vh;
   padding: 0 1rem;
   background-color: var(--bg);
 }
 
-.wave3 {
+.judges .wave {
   position: absolute;
-  top: 0;
+  top: -2px;
   left: 0;
   width: 100%;
   overflow: hidden;
@@ -63,29 +133,64 @@
   transform: rotate(180deg);
 }
 
-.wave3 svg {
+.judges .wave svg {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
   height: 65px;
+  transform: rotateY(180deg);
 }
 
-.wave3 .shapefill {
+.judges .wave .shapefill {
   fill: var(--brand-lightest);
 }
 
-.section4 {
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.grid > figure {
+  margin: 0;
+  width: 150px;
+}
+
+.image {
+  width: 150px;
+}
+
+.link {
+  border-radius: 10rem;
+}
+
+.name {
+  margin: 0.3rem 0;
+  line-height: 1.5rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+
+.role {
+  margin: 0;
+  line-height: 1.5rem;
+  color: var(--brand-dark);
+}
+
+.resources {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
+  min-height: 60vh;
   padding: 0 1rem;
   background-color: #fdceae;
 }
 
-.wave4 {
+.resources .wave {
   position: absolute;
   top: 0;
   left: 0;
@@ -95,15 +200,20 @@
   transform: rotate(180deg);
 }
 
-.wave4 svg {
+.resources .wave svg {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
   height: 65px;
 }
 
-.wave4 .shapefill {
+.resources .wave .shapefill {
   fill: var(--bg);
+}
+
+.wrapper {
+  max-width: 60rem;
+  margin: 5rem 0;
 }
 
 .buttonWrapper {
@@ -143,15 +253,6 @@
   color: #fff9ef;
 }
 
-.button:nth-of-type(3) {
-  color: var(--brand-darkest);
-}
-
-.button:nth-of-type(3):hover {
-  background-color: var(--brand-darkest);
-  color: #fff9ef;
-}
-
 .arrow {
   font-size: 1rem;
   margin-left: 0.5rem;
@@ -170,5 +271,30 @@
   }
   .button {
     width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid{
+    justify-content: space-evenly;
+  }
+}
+
+@media (max-width: 1000px) {
+  .schedules {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 40rem;
+  }
+  .schedules > div {
+    max-width: 40rem;
+  }
+  .event {
+    width: 100%;
+    max-width: 40rem;
+  }
+  .hidden {
+    display: none;
   }
 }
