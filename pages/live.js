@@ -17,6 +17,7 @@ import resourcesRight from '../public/assets/resources_right.png'
 import logo from '../public/assets/logo.png'
 import Michael from '../public/assets/judges/michael_odea.jpg'
 import Keila from '../public/assets/judges/keila_braden.jpg'
+import Elaine from '../public/assets/judges/elaine_lin.jpg'
 import Craig from '../public/assets/judges/craig_schroeder.jpg'
 import Danial from '../public/assets/judges/danial_beg.jpg'
 import Jonathan from '../public/assets/judges/jonathan_trinh.jpg'
@@ -52,7 +53,7 @@ export default function Live() {
       role: 'Design@UCR Director',
     },
     {
-      image: logo,
+      image: Elaine,
       name: 'Elaine Lin',
       role: 'Design@UCR Communications',
     },
