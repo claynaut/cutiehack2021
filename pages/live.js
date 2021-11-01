@@ -4,8 +4,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Element } from 'react-scroll'
+import { useSession } from 'next-auth/client'
 import { FaChevronRight } from 'react-icons/fa'
-import CountdownWrapper from '../components/Countdown'
+import CountdownWrapper from '../components/HackerCountdown'
 import Sponsors from '../pages/sponsors'
 import Team from '../pages/team'
 import Judge from '../components/Judge'
@@ -34,6 +35,8 @@ import Paea from '../public/assets/judges/paea_lependu.jpg'
 import styles from '../styles/Live.module.css'
 
 export default function Live() {
+  const [session] = useSession()
+  const [appStatus, setAppStatus] = useState('')
   const [isMobile, setIsMobile] = useState(false)
   var buttonVariants = {}
   if (!isMobile)
@@ -60,7 +63,7 @@ export default function Live() {
     },
     {
       image: Craig,
-      name: 'Craig Schroeder',
+      name: 'Dr. Craig Schroeder',
       role: 'UCR Professor',
     },
     {
@@ -90,7 +93,7 @@ export default function Live() {
     },
     {
       image: Fuad,
-      name: 'Fuad Jamour',
+      name: 'Dr. Fuad Jamour',
       role: 'UCR Professor',
     },
     {
@@ -115,7 +118,7 @@ export default function Live() {
     },
     {
       image: Paea,
-      name: 'Paea LePendu',
+      name: 'Dr. Paea LePendu',
       role: 'UCR Professor',
     },
   ]
@@ -245,13 +248,28 @@ export default function Live() {
     },
   ]
 
+  const fetchData = async (id) => {
+    const response = await fetch('/api/checkin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user: id }),
+    })
+    const data = await response.json()
+    if (data.checkins[0]) {
+      setAppStatus(data.checkins[0].qualified)
+    }
+  }
+
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 720)
   }
 
   useEffect(() => {
+    if (session) fetchData(session.user.id)
     window.addEventListener('resize', handleResize)
-  })
+  }, [session])
 
   return (
     <>
@@ -288,7 +306,6 @@ export default function Live() {
             <p className={styles.description}>a beginner friendly hackathon</p>
             <CountdownWrapper
               date="2021-11-06T20:00:00"
-              heading="time left until hacking ends"
             />
           </div>
           <div className={styles.heroRight}>
@@ -480,6 +497,20 @@ export default function Live() {
                     <FaChevronRight className={styles.arrow} />
                   </motion.button>
                 </Link>
+                { (session && appStatus === 'yes') &&
+                  <Link passHref href="https://discord.gg/CjkwAvFr2T">
+                    <motion.button
+                      variants={buttonVariants}
+                      whileHover="hover"
+                      whileTap="tap"
+                      transition={{ ease: 'easeInOut', duration: 0.015 }}
+                      className={styles.button}
+                    >
+                      <span>discord</span>
+                      <FaChevronRight className={styles.arrow} />
+                    </motion.button>
+                  </Link>
+                }
               </div>
             </div>
           </div>
