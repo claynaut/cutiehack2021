@@ -1,14 +1,17 @@
 import Layout from '../components/Layout'
-import styles from '../styles/Index.module.css'
+import Head from 'next/head'
 
 export default function Custom500() {
   return (
     <Layout>
-      <div className={styles.title}>500</div>
-      <div className={styles.description}>
+      <Head>
+        <title>Cutie Hack | 404</title>
+      </Head>
+      <h1>500</h1>
+      <h3>
         We are having trouble fetching important data right now. Please check
         back later.
-      </div>
+      </h3>
     </Layout>
   )
 }
